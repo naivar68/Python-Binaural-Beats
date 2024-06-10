@@ -3,7 +3,6 @@ from scipy.io.wavfile import write
 from moviepy.editor import *
 from variables import Variables
 
-variables = Variables()
 
 
 class BinauralBeatMixer:
@@ -12,8 +11,7 @@ class BinauralBeatMixer:
         self.duration = variables.duration
         self.frequency_left = variables.frequency_left
         self.frequency_right = variables.frequency_right
-        self.Video = variables.video_name
-
+        self.video_name = variables.video_name
 
 
     def binauralmixer(self):
@@ -34,11 +32,11 @@ class BinauralBeatMixer:
         mixed = tone_left + tone_right
 
         # Write the mixed audio back to a temporary WAV file
-        write("temp_mixed.wav", self.variables.sample_rate, mixed.astype(np.int16))
-
+        # write("temp_mixed.wav", self.variables.sample_rate, mixed.astype(np.int16))
+        write("temp_mixed.wav", variables.sample_rate, mixed.astype(np.int16))
 
         # Combine the mixed audio with the original video (without audio)
-        final_clip = VideoFileClip(self.Video).set_audio(AudioFileClip("temp_mixed.wav"))
+        final_clip = VideoFileClip(self.video_name).set_audio(AudioFileClip("temp_mixed.wav"))
 
         # Save the final video with the binaural beat added to the background music
         final_clip.write_videofile("final_output.mp4")

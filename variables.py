@@ -1,6 +1,4 @@
 import time
-import os
-from scipy.io.wavfile import write
 from moviepy.editor import *
 
 
@@ -38,7 +36,7 @@ class Variables:
 
 
         # Get the video file name from the user
-    def video_name(self):
+    def video_name(self, video_name):
         video_name = input("Please enter the name of the video file (including the extension): ")
         # Check if the file exists in the directory
         if not os.path.exists(video_name):
@@ -54,7 +52,9 @@ class Variables:
 
         else:
             print("The file exists in this directory. Proceeding with the Binaural Beat Generator and Mixer...")
-            return str(video_name)
+            return video_name
+
+
 
 
 

@@ -1,9 +1,9 @@
-from variables import Variables
 import numpy as np
 from scipy.io.wavfile import write
 import time
+from variables import Variables
 
-variables = Variables()
+
 
 class BinauralBeatGenerator:
     def __init__(self, variables):
