@@ -1,51 +1,71 @@
+# main.py
 from BinauralBeatGenerator import BinauralBeatGenerator
 from BinauralBeatMixer import BinauralBeatMixer
-import os
-import time
 from variables import Variables
-
-
+import subprocess as sp
+import ffmpeg
+import os
+import sys
 
 def main():
-    # Clear the screen and welcome the user with important information
-    os.system("cls") if os.name == "nt" else os.system("clear")
-    print("Welcome to the Binaural Beat Generator and Mixer!\n")
-    print("You need to have an MP4 file in the same directory as this script to proceed.\n")
-    print("You will need to add the file extension to the file name.\n")
-    print("If the file does not exist, or is NOT an MP$ file, the program will exit.\n")
-    variables = Variables()
-    variables.interface()
-    variables.video_name()
 
-    time.sleep(2)
+    sp.run("python testing.py", shell=True)
+    sp.run("cls" if os.name == "nt" else "clear", shell=True)
+    print('''
+          Binaural Beat Generator
+          -----------------------
+          This is a Binaural Beat Generator and MIXER to take the beats and mix them with a video file.
+          You need to install the requirements in requirements.txt, FFMPEG if not installed
+          and also name the MP4 file you want to mix the beats with. Please ensure the video file is in the same directory as this program.
+          The video file must be an MP4 file. The video file must be named with the extension.
 
+          ''')
+    # Check if ffmpeg is installed
+    if not sp.run(["ffmpeg", "-version"], stdout=sp.DEVNULL, stderr=sp.STDOUT).returncode == 0:
+        print("ffmpeg is not installed or not accessible.")
+        raise SystemExit()
 
+    start = input("Press Enter to start the process.")
+    if start == "":
+        sp.run("cls" if os.name == "nt" else "clear", shell=True)
+        variables = Variables()
+        variables.name_video()
+        variables.interface()
 
+    else:
+        raise SystemExit()
 
-    # Generate the binaural beat
-    print("Press 'Enter' to continue...")
-    input()
-    os.system("cls") if os.name == "nt" else os.system("clear")
-    print("Generating the binaural beat...")
-    time.sleep(2)
-    BinauralBeatGenerator(variables).binaural_beats()
-    time.sleep(2)
-    print("Binaural beat successfully generated.")
-    time.sleep(2)
-    print("Press 'Enter' to continue...")
-    input()
-    os.system("cls") if os.name == "nt" else os.system("clear")
+    # Create an instance of BinauralBeatGenerator and call the methods
+    print()
+    query = input("Would you like to generate binaural beats? (y/n): ")
+    result = None
+    if query == "y":
+        binaural_beat_generator = BinauralBeatGenerator(variables)
+        result = binaural_beat_generator.binaural_beats(variables)
+    if result is None:
+        print("Error generating binaural beats.")
+        sys.exit()
+    else:
+        print("Binaural beats successfully generated.")
+        print("Ready to mix the binaural beats with the video file.")
+        print("The output file is named binaural_beat.wav.")
 
-    print("Generating the background music...")
-    time.sleep(2)
-    BinauralBeatMixer(variables).binauralmixer()
-    time.sleep(2)
-    print("Background music successfully generated.")
-    print("The completed file is in this directory. Please remove it if you wish to generate a new file.")
-    print("Thank you for using the Binaural Beat Generator and Mixer!")
-    time.sleep(2)
-    exit(0)
+    # Create an instance of BinauralBeatMixer and call the methods
+    query = input("Would you like to mix the binaural beats with the video file? (y/n): ")
+    result = None
+    if query == "y":
+        binaural_beat_mixer = BinauralBeatMixer(variables)
+        result = binaural_beat_mixer.binauralmixer(variables)
+    if result is None:
+        print("Error mixing binaural beats.")
+        sys.exit()
+    else:
+        print("Binaural beats successfully mixed.")
+        print("Ready to mix the binaural beats with the video file.")
+        print("The output file is named output.wav.")
+        print("Thank you for using the Binaural Beat Generator and Mixer.")
+        print("Goodbye!")
+        sys.exit()
 
 if __name__ == "__main__":
     main()
-

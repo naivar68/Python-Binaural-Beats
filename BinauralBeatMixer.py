@@ -1,44 +1,71 @@
-import numpy as np
-from scipy.io.wavfile import write
-from moviepy.editor import *
+import subprocess as sp
+import os
+import ffmpeg
+import sys
 from variables import Variables
+
+
+
+
+
+
+
 
 
 
 class BinauralBeatMixer:
     def __init__(self, variables):
-        self.sample_rate = variables.sample_rate
+        variables = Variables()
         self.duration = variables.duration
         self.frequency_left = variables.frequency_left
         self.frequency_right = variables.frequency_right
-        self.video_name = variables.video_name
+        self.sample_rate = variables.sample_rate
+        self.ffmpeg_path = variables.ffmpeg_path  # Use ffmpeg_path from variables
 
+    class BinauralBeatMixer:
+        def __init__(self, variables):
+            self.variables = variables
+            self.duration = variables.duration
+            self.frequency_left = variables.frequency_left
+            self.frequency_right = variables.frequency_right
+            self.sample_rate = variables.sample_rate
+            self.ffmpeg_path = variables.ffmpeg_path  # Use ffmpeg_path from variables
 
-    def binauralmixer(self):
+        def binauralmixer(self):
+            # Generate left tone
+            try:
+                sp.run("cls" if os.name == "nt" else "clear", shell=True)
+                print("Mixing binaural beats with the video file.")
 
-        # Generate time points
-        t = np.linspace(0, self.variables.duration, int(self.variables.sample_rate * self.variables.duration), endpoint=False)
-        # Generate sine wave tones
-        tone_left = np.sin(2 * np.pi * self.variables.frequency_left * t)
-        tone_right = np.sin(2 * np.pi * self.variables.frequency_right * t)
+                command = f'{self.ffmpeg_path} -y -f lavfi -i "sine=frequency={self.variables.frequency_left}:duration={self.variables.duration}" left.wav'
+                print(f"Running command: {command}")
+                result = sp.run(command, shell=True, capture_output=True)
+                if result.returncode != 0:
+                    print(f"Error running command: {result.stderr.decode()}")
+                    return None
 
-        # Combine into a stereo signal
-        stereo_tone = np.vstack((tone_left, tone_right)).T
+                # Generate right tone
+                command = f'{self.ffmpeg_path} -y -f lavfi -i "sine=frequency={self.variables.frequency_right}:duration={self.variables.duration}" right.wav'
+                print(f"Running command: {command}")
+                result = sp.run(command, shell=True, capture_output=True)
+                if result.returncode != 0:
+                    print(f"Error running command: {result.stderr.decode()}")
+                    return None
 
-        # Convert to 16-bit data
-        stereo_tone = np.int16(stereo_tone * 32767)
+                # Merge into stereo file
+                command = f'{self.ffmpeg_path} -y -i left.wav -i right.wav -filter_complex "[0:a][1:a]amerge=inputs=2[a]" -map "[a]" output.wav'
+                print(f"Running command: {command}")
+                result = sp.run(command, shell=True, capture_output=True)
+                if result.returncode != 0:
+                    print(f"Error running command: {result.stderr.decode()}")
+                    return None
 
-        # Mix the audio data
-        mixed = tone_left + tone_right
-
-        # Write the mixed audio back to a temporary WAV file
-        # write("temp_mixed.wav", self.variables.sample_rate, mixed.astype(np.int16))
-        write("temp_mixed.wav", variables.sample_rate, mixed.astype(np.int16))
-
-        # Combine the mixed audio with the original video (without audio)
-        final_clip = VideoFileClip(self.video_name).set_audio(AudioFileClip("temp_mixed.wav"))
-
-        # Save the final video with the binaural beat added to the background music
-        final_clip.write_videofile("final_output.mp4")
-
-        return "final_output.mp4"
+                else:
+                    # Remove temporary files
+                    os.remove('left.wav')
+                    os.remove('right.wav')
+                    print("Binaural beats successfully mixed with the video file. The output file is named output.wav.")
+                    return "output.wav"
+            except FileNotFoundError:
+                print("ffmpeg is not installed or not accessible.")
+                raise SystemExit()
