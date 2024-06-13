@@ -8,6 +8,7 @@ from variables import Variables
 
 class BinauralBeatGenerator:
     def __init__(self, variables):
+        self.variables = Variables()
         self.duration = variables.duration
         self.frequency_left = variables.frequency_left
         self.frequency_right = variables.frequency_right

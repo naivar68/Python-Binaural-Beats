@@ -3,11 +3,24 @@ from BinauralBeatGenerator import BinauralBeatGenerator
 from BinauralBeatMixer import BinauralBeatMixer
 from variables import Variables
 import subprocess as sp
-import ffmpeg
 import os
 import sys
+import ctypes
 
 def main():
+
+    # Set priviledges to root/admin
+    if os.name == "nt":
+        if not ctypes.windll.shell32.IsUserAnAdmin():
+            print("Please run this program as an administrator.")
+            sys.exit()
+    else:
+        if os.geteuid() != 0:
+            print("Please run this program as root.")
+            sp.run("sudo su", shell=True)
+            sys.exit()
+
+
 
     sp.run("python testing.py", shell=True)
     sp.run("cls" if os.name == "nt" else "clear", shell=True)
@@ -25,17 +38,21 @@ def main():
         print("ffmpeg is not installed or not accessible.")
         raise SystemExit()
 
-    start = input("Press Enter to start the process.")
+    start = input("Press Enter to start the process, or press 'q' to quit.")
     if start == "":
         sp.run("cls" if os.name == "nt" else "clear", shell=True)
         variables = Variables()
         variables.name_video()
         variables.interface()
-
+    elif start == "q":
+        print("Goodbye!")
+        sys.exit()
     else:
+        print("Invalid input. Please press Enter to start the process, or press 'q' to quit.")
         raise SystemExit()
 
-    # Create an instance of BinauralBeatGenerator and call the methods
+
+
     print()
     query = input("Would you like to generate binaural beats? (y/n): ")
     result = None
@@ -55,7 +72,7 @@ def main():
     result = None
     if query == "y":
         binaural_beat_mixer = BinauralBeatMixer(variables)
-        result = binaural_beat_mixer.binauralmixer(variables)
+        result = binaural_beat_mixer.binauralmixer()
     if result is None:
         print("Error mixing binaural beats.")
         sys.exit()
