@@ -5,22 +5,10 @@ from variables import Variables
 import subprocess as sp
 import os
 import sys
+import ffmpeg
 import ctypes
 
 def main():
-
-    # Set priviledges to root/admin
-    if os.name == "nt":
-        if not ctypes.windll.shell32.IsUserAnAdmin():
-            print("Please run this program as an administrator.")
-            sys.exit()
-    else:
-        if os.geteuid() != 0:
-            print("Please run this program as root.")
-            sp.run("sudo su", shell=True)
-            sys.exit()
-
-
 
     sp.run("python testing.py", shell=True)
     sp.run("cls" if os.name == "nt" else "clear", shell=True)
@@ -61,7 +49,7 @@ def main():
         result = binaural_beat_generator.binaural_beats(variables)
     if result is None:
         print("Error generating binaural beats.")
-        sys.exit()
+        raise SystemExit()
     else:
         print("Binaural beats successfully generated.")
         print("Ready to mix the binaural beats with the video file.")
@@ -75,14 +63,14 @@ def main():
         result = binaural_beat_mixer.binauralmixer()
     if result is None:
         print("Error mixing binaural beats.")
-        sys.exit()
+        raise SystemExit()
     else:
         print("Binaural beats successfully mixed.")
         print("Ready to mix the binaural beats with the video file.")
         print("The output file is named output.wav.")
         print("Thank you for using the Binaural Beat Generator and Mixer.")
         print("Goodbye!")
-        sys.exit()
+        raise SystemExit()
 
 if __name__ == "__main__":
     main()

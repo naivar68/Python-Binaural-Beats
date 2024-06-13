@@ -1,9 +1,6 @@
-import ffmpeg
-import subprocess as sp
-import os
-import sys
 from variables import Variables
-
+import ffmpeg
+from pathlib import Path
 
 
 class BinauralBeatGenerator:
@@ -14,23 +11,28 @@ class BinauralBeatGenerator:
         self.frequency_right = variables.frequency_right
         self.sample_rate = variables.sample_rate
         self.ffmpeg_path = 'ffmpeg'
+        self.video_name = variables.video_name
 
     def binaural_beats(self, variables):
-        # Generate left tone
-        command = f'{self.ffmpeg_path} -y -f lavfi -i "sine=frequency={variables.frequency_left}:duration={variables.duration}" left.wav'
-        print(f"Running command: {command}")
-        result = sp.run(command, shell=True, capture_output=True)
-        if result.returncode != 0:
-            print(f"Error running command: {result.stderr.decode()}")
+
+
+# Generate left tone
+        try:
+            if not Path('left.wav').exists():
+                ffmpeg.input(f'{self.video_name}').filter('sine',
+                                                          frequency=self.frequency_left,
+                                                          duration=self.duration).output('left.wav', ar=self.sample_rate).run()
+                print("Left tone generated.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
             return None
 
         # Generate right tone
-        command = f'{self.ffmpeg_path} -y -f lavfi -i "sine=frequency={variables.frequency_right}:duration={variables.duration}" right.wav'
-        print(f"Running command: {command}")
-        result = sp.run(command, shell=True, capture_output=True)
-        if result.returncode != 0:
-            print(f"Error running command: {result.stderr.decode()}")
+        try:
+            ffmpeg.input(f'{self.video_name}').filter('sine',
+                                                      frequency=self.frequency_right,
+                                                      duration=self.duration).output('right.wav', ar=self.sample_rate).run()
+            print("Right tone generated.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
             return None
-        else:
-            print("Binaural beats successfully generated.")
-            return "left.wav", "right.wav"
