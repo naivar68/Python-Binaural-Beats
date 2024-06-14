@@ -19,7 +19,7 @@ This project is a Binaural Beat Generator and Mixer that creates binaural beats 
 1. Clone the repository:
     ```bash
     git clone https://github.com/naivar68/Python-Binaural-Beats.git
-    cd BinauralBeatGenerator
+    cd Python-Binaural-Beats
     ```
 
 2. Install the required Python packages:
