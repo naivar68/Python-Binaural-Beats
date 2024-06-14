@@ -3,8 +3,6 @@ import os
 import sys
 from pathlib import Path
 
-
-
 class Variables:
     def __init__(self):
         self.sample_rate = None
@@ -12,9 +10,6 @@ class Variables:
         self.frequency_left = None
         self.frequency_right = None
         self.video_name = ""
-        self.ffmpeg_path = ""
-
-
 
     def name_video(self):
         self.video_name = input("Enter the name of the video file (including the file extension): ")
@@ -22,12 +17,9 @@ class Variables:
             raise SystemExit("The file does not exist in this directory. Please ensure the file is in this directory.")
         elif not self.video_name.endswith(".mp4"):
             raise SystemExit("The file is not an MP4 file. Please ensure the file is an MP4 file.")
-        elif Path(f"The file {self.video_name}").exists():
-            raise SystemExit(f"The file {self.video_name} already exists. Please rename the file or remove the existing file.")
         return self.video_name
 
-
-
+    @staticmethod
     def command_exists(command):
         try:
             os.system(f"where {command}")
@@ -35,24 +27,14 @@ class Variables:
         except FileNotFoundError:
             return False
 
+    @staticmethod
     def is_ffmpeg_installed():
         try:
             ffmpeg = os.system("where ffmpeg")
             if ffmpeg == 0:
-                ffmpeg_path = "ffmpeg"
-                return ffmpeg_path
+                return "ffmpeg"
         except FileNotFoundError:
             return False
-
-
-
-
-
-            return True
-        except FileNotFoundError:
-            return False
-
-
 
     def interface(self):
         try:
@@ -70,17 +52,3 @@ class Variables:
             sys.exit()
 
         return self.sample_rate, self.duration, self.frequency_left, self.frequency_right, self.video_name
-
-
-
-
-
-
-
-
-
-
-
-
-
-
