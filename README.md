@@ -5,8 +5,10 @@ This project is a Binaural Beat Generator and Mixer that creates binaural beats 
 ## Features
 
 - Generate binaural beats with customizable frequencies for the left and right ears.
+- Set the volume of the binaural beats.
+- Optional frequency transition for binaural beats over time.
 - Mix the generated binaural beats with an existing video file.
-- Output the final video with the mixed audio.
+- Save the final video with the mixed audio to an SQLite database.
 
 ## Requirements
 
@@ -18,8 +20,8 @@ This project is a Binaural Beat Generator and Mixer that creates binaural beats 
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/naivar68/Python-Binaural-Beats.git
-    cd Python-Binaural-Beats
+    git clone https://github.com/yourusername/BinauralBeatGenerator.git
+    cd BinauralBeatGenerator
     ```
 
 2. Install the required Python packages:
@@ -42,13 +44,16 @@ This project is a Binaural Beat Generator and Mixer that creates binaural beats 
     ```
 
 3. Follow the prompts to input the necessary parameters:
-    - Sample rate (e.g., `44100` for CD-quality audio)
-    - Duration of the binaural beats (in seconds)
-    - Frequency for the left ear (in Hz)
-    - Frequency for the right ear (in Hz)
-    - Name of the video file (including the file extension, e.g., `video.mp4`)
+   - Sample rate (e.g., `44100` for CD-quality audio)
+   - Duration of the binaural beats (in seconds)
+   - Frequency for the left ear (in Hz)
+   - Frequency for the right ear (in Hz)
+   - Volume (e.g., `1.0` for 100%, `0.5` for 50%)
+   - Frequency transition rate for left and right ears (optional)
+   - Name of the video file (including the file extension, e.g., `video.mp4`)
+   - Desired name for the output file (including the .mp4 extension)
 
-4. The script will generate the binaural beats and mix them with the provided video file, producing an output file named `output.mp4`.
+4. The script will generate the binaural beats and mix them with the provided video file, producing an output file named as specified by the user. You will be prompted to save this output file to the SQLite database.
 
 ## Project Structure
 
