@@ -35,6 +35,8 @@ This project is a Binaural Beat Generator and Mixer that creates binaural beats 
     ```
    If `ffmpeg` is not installed, you can download and install it from [FFmpeg.org](https://ffmpeg.org/download.html).
 
+4. Please note the included `binaural_frequencies` file added, and refer to it as needed to create the proper binaural tones.
+
 ## Usage
 
 1. Place the video file you want to mix the binaural beats with in the same directory as the script.

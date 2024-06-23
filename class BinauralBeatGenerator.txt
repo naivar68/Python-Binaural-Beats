@@ -1,0 +1,88 @@
+class BinauralBeatGenerator:
+    # ...
+    def binaural_beats(self, variables):
+        # Generate left tone
+        try:
+            if not Path('left.wav').exists():
+                (
+                    ffmpeg
+                    .output('anullsrc', 'left.wav', f='lavfi', **{'filter:a': f'sine=frequency={self.frequency_left}:duration={self.duration}:sample_rate={self.sample_rate}'})
+                    .run()
+                )
+                print("Left tone generated.")
+            # ...
+
+        # Generate right tone
+        try:
+            if not Path('right.wav').exists():
+                (
+                    ffmpeg
+                    .output('anullsrc', 'right.wav', f='lavfi', **{'filter:a': f'sine=frequency={self.frequency_right}:duration={self.duration}:sample_rate={self.sample_rate}'})
+                    .run()
+                )
+                print("Right tone generated.")
+            # ...
+        # ...
+
+class BinauralBeatGenerator:
+    # ...
+    def binaural_beats(self, variables):
+        # Generate left tone
+        try:
+            if not Path('left.wav').exists():
+                (
+                    ffmpeg
+                    .input('anullsrc', f='lavfi')
+                    .filter('sine', frequency=self.frequency_left, duration=self.duration, sample_rate=self.sample_rate)
+                    .output('left.wav')
+                    .run()
+                )
+                print("Left tone generated.")
+            # ...
+
+        # Generate right tone
+        try:
+            if not Path('right.wav').exists():
+                (
+                    ffmpeg
+                    .input('anullsrc', f='lavfi')
+                    .filter('sine', frequency=self.frequency_right, duration=self.duration, sample_rate=self.sample_rate)
+                    .output('right.wav')
+                    .run()
+                )
+                print("Right tone generated.")
+            # ...
+        # ...
+
+
+*************************************************************
+
+class BinauralBeatGenerator:
+    # ...
+    def binaural_beats(self, variables):
+        # Generate left tone
+        try:
+            if not Path('left.wav').exists():
+                (
+                    ffmpeg
+                    .input('anullsrc', f='lavfi', ar=self.sample_rate)
+                    .filter('sine', frequency=self.frequency_left, duration=self.duration)
+                    .output('left.wav')
+                    .run()
+                )
+                print("Left tone generated.")
+            # ...
+
+        # Generate right tone
+        try:
+            if not Path('right.wav').exists():
+                (
+                    ffmpeg
+                    .input('anullsrc', f='lavfi', ar=self.sample_rate)
+                    .filter('sine', frequency=self.frequency_right, duration=self.duration)
+                    .output('right.wav')
+                    .run()
+                )
+                print("Right tone generated.")
+            # ...
+        # ...
